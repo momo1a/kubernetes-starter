@@ -13,12 +13,15 @@ spec:
     app: message-service
   type: ClusterIP
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: message-service-deployment
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: message-service
   template: 
     metadata:
       labels:
@@ -26,7 +29,9 @@ spec:
     spec:
       containers:
       - name: message-service
-        image: {{HUB}}/micro-service/message-service:latest
+        image: hub.myrepo.com:8080/microservice/message-service:latest
         ports:
         - containerPort: 9090
+      imagePullSecrets:
+        - name: myhubregsecret
 

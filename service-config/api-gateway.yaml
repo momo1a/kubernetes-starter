@@ -14,12 +14,15 @@ spec:
     app: api-gateway
   type: NodePort
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-gateway-deployment
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
   template: 
     metadata:
       labels:
@@ -27,7 +30,8 @@ spec:
     spec:
       containers:
       - name: api-gateway
-        image: {{HUB}}/micro-service/api-gateway-zuul:latest
+        image: hub.myrepo.com:8080/microservice/api-gateway:latest
         ports:
         - containerPort: 8080
-
+      imagePullSecrets:
+        - name: myhubregsecret

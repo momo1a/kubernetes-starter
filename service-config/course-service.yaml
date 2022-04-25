@@ -13,12 +13,15 @@ spec:
     app: course-service
   type: ClusterIP
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: course-service-deployment
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: course-service
   template:
     metadata:
       labels:
@@ -26,11 +29,12 @@ spec:
     spec:
       containers:
       - name: course-service
-        image: {{HUB}}/micro-service/course-service:latest
+        image: hub.myrepo.com:8080/microservice/course-service:latest
         ports:
         - containerPort: 20880
       - name: course-edge-service
-        image: {{HUB}}/micro-service/course-edge-service:latest
+        image: hub.myrepo.com:8080/microservice/course-edge-service:latest
         ports:
         - containerPort: 8081
-
+      imagePullSecrets:
+        - name: myhubregsecret

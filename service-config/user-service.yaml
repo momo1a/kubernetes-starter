@@ -20,12 +20,15 @@ spec:
   sessionAffinity: None
   type: ClusterIP
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: user-service-deployment
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
   template:
     metadata:
       labels:
@@ -33,11 +36,12 @@ spec:
     spec:
       containers:
       - name: user-service
-        image: {{HUB}}/micro-service/user-service:latest
+        image: hub.myrepo.com:8080/microservice/user-service:latest
         ports:
         - containerPort: 7911
       - name: user-edge-service
-        image: {{HUB}}/micro-service/user-edge-service:latest
+        image: hub.myrepo.com:8080/microservice/user-edge-service:latest
         ports:
         - containerPort: 8082
-
+      imagePullSecrets:
+        - name: myhubregsecret
